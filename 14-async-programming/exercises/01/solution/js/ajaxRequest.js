@@ -24,7 +24,7 @@ function ajaxRequest({
    * @param {string} message - the error message
    */
   function handleError(message) {
-
+    console.error(message);
   }
 
   /**
@@ -32,17 +32,19 @@ function ajaxRequest({
    * @param {Object} xhr - the error message
    */
   function handleLoad(xhr) {
-
+    handleLoad(xhr);
   }
 
   /**
    * Send ajax request
    */
   function request() {
-
+    XMLHttpRequest.send(url);
   }
 
   return request;
 }
+
+object.addEventListener("load", handleLoad);
 
 export default ajaxRequest;
