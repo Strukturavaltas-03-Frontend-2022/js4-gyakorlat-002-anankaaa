@@ -45,6 +45,4 @@ function ajaxRequest({
   return request;
 }
 
-object.addEventListener("load", handleLoad);
-
 export default ajaxRequest;
