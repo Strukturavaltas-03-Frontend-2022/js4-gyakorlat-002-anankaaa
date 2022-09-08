@@ -24,7 +24,7 @@ function ajaxRequest({
    * @param {string} message - the error message
    */
   function handleError(message) {
-    console.error(message);
+    console.log("ERROR:", message);
   }
 
   /**
@@ -32,14 +32,33 @@ function ajaxRequest({
    * @param {Object} xhr - the error message
    */
   function handleLoad(xhr) {
-    handleLoad(xhr);
+    console.log(("Loaded", xhr));
+    successCallback(xhr.response);
   }
 
   /**
    * Send ajax request
    */
   function request() {
-    XMLHttpRequest.send(url);
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.onload = (e) => handleLoad(e.target);
+    xhr.onerror = (e) => {
+      if (e.target.status === 404) {
+        retryCount -= 1;
+        if (retryCount === 0) {
+          handleError(`Resource not avaiable: ${url}`);
+        } else {
+          const to = setTimeout(() => {
+            clearTimeout(to);
+            request();
+          }, delay);
+        }
+      } else {
+        handleError(e.message);
+      }
+    };
+    xhr.send();
   }
 
   return request;
